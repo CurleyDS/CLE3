@@ -39,14 +39,20 @@ function animeClickHandler(e) {
 
     let anime = animeData[clickedItem.dataset.id];
 
-    let title = document.createElement('h2');
-    title.innerHTML = `${anime.name}`;
-    detailModalContent.appendChild(title);
-
     //Element for the image of the anime
     let image = document.createElement('img');
     image.src = anime.imgUrl;
     detailModalContent.appendChild(image);
+
+    //Element for the title of the anime
+    let title = document.createElement('h2');
+    title.innerHTML = `${anime.name}`;
+    detailModalContent.appendChild(title);
+
+    //Element for the description of the anime
+    let desc = document.createElement('p');
+    desc.innerHTML = `${anime.description}`;
+    detailModalContent.appendChild(desc);
 
     detailModal.classList.add('open');
     detailModal.addEventListener('click', detailModalCloseClickHandler);
@@ -114,10 +120,16 @@ function fillAnimeCard(anime)
     title.innerHTML = `${anime.name}`;
     animeCard.appendChild(title);
 
-    //Element for the image of the Pokémon
+    //Element for the image of the anime
     let image = document.createElement('img');
     image.src = anime.imgUrl;
     animeCard.appendChild(image);
+
+    //Element for the image of the anime
+    let button = document.createElement('button');
+    button.innerHTML = "Details";
+    button.dataset.id = anime.id;
+    animeCard.appendChild(button);
 
     animeData[anime.id] = anime;
 }
