@@ -10,24 +10,26 @@ function init()
     magazine = document.getElementById('anime-magazine');
     magazine.addEventListener('click', animeClickHandler);
   
-    detailModal = document.getElementById('anime-detail');
-    detailModalCloseButton = document.getElementById('modal-content');
-    detailModalContent = document.querySelector('.modal-content');
+    section = document.querySelector('.section');
+    details = document.getElementById('anime-detail');
+    detailsContent = document.querySelector('.details-content');
+    detailsCloseButton = document.getElementById('details-content');
 
     //Start the application with loading the API data
     getAnimeData();
 }
 
-function detailModalCloseClickHandler(e) {
+function detailsCloseClickHandler(e) {
     let clickedItem = e.target;
   
     if (clickedItem.nodeName !== "BUTTON") {
         return;
     }
   
-    detailModal.classList.remove('open');
-    detailModalContent.innerHTML = "";
-    detailModal.removeEventListener('click', detailModalCloseClickHandler);
+    section.classList.remove('open-details');
+    details.classList.remove('open');
+    detailsContent.dataset.name = "";
+    details.removeEventListener('click', detailsCloseClickHandler);
 }
 
 function animeClickHandler(e) {
@@ -38,24 +40,35 @@ function animeClickHandler(e) {
     }
 
     let anime = animeData[clickedItem.dataset.id];
+    
+    detailsContent.innerHTML = "";
 
-    //Element for the image of the anime
-    let image = document.createElement('img');
-    image.src = anime.imgUrl;
-    detailModalContent.appendChild(image);
+    if (detailsContent.dataset.name != anime.name) {
+        // Dataset for the details-content
+        detailsContent.dataset.name = anime.name;
 
-    //Element for the title of the anime
-    let title = document.createElement('h2');
-    title.innerHTML = `${anime.name}`;
-    detailModalContent.appendChild(title);
+        //Element for the image of the anime
+        let image = document.createElement('img');
+        image.src = anime.imgUrl;
+        detailsContent.appendChild(image);
 
-    //Element for the description of the anime
-    let desc = document.createElement('p');
-    desc.innerHTML = `${anime.description}`;
-    detailModalContent.appendChild(desc);
+        //Element for the title of the anime
+        let title = document.createElement('h2');
+        title.innerHTML = `${anime.name}`;
+        detailsContent.appendChild(title);
 
-    detailModal.classList.add('open');
-    detailModal.addEventListener('click', detailModalCloseClickHandler);
+        //Element for the description of the anime
+        let desc = document.createElement('p');
+        desc.innerHTML = `${anime.description}`;
+        detailsContent.appendChild(desc);
+        
+        section.classList.add('open-details');
+        details.classList.add('open');
+    } else {
+        detailsCloseClickHandler(e);
+    }
+
+    details.addEventListener('click', detailsCloseClickHandler);
 }
 
 /**
