@@ -1,41 +1,49 @@
+// Initiate program
 window.addEventListener('load', init);
 
+// global variables
 let fetchUrl = 'http://localhost/CLE3/webservice/index.php';
 let magazine;
 let animeData = {};
 let favoriteItems = [];
 
+/**
+ * Initialize the application
+ */
 function init()
 {
-    //Retrieve magazine
+    // Get div element for section
+    section = document.querySelector('.section');
+
+    // Get div element for anime-magazine
     magazine = document.getElementById('anime-magazine');
     magazine.addEventListener('click', animeClickHandler);
-  
-    section = document.querySelector('.section');
+
+    // Get divs en button elements for details
     details = document.getElementById('anime-detail');
     detailsContent = document.querySelector('.details-content');
     detailsCloseButton = document.getElementById('details-content');
 
-    //Start the application with loading the API data
+    // Start the application with loading the API data
     getAnimeData();
     
+    // Get favoritized items of the anime magazine
     let favoriteItemsString = localStorage.getItem('favoriteItems');
     if (favoriteItemsString !== null) {
         favoriteItems = JSON.parse(favoriteItemsString);
-        console.log(favoriteItems);
     }
 }
 
-function addToFavorites(anime) {
-    let animeCard = document.querySelector(`.anime-card[data-name='${anime.name}']`);
-    
-    console.log(animeCard);
-}
-
-function favoritesOpenClickHandler(e) {
+/**
+ * Handler for when the favoritize button is clicked
+ * 
+ * @param e 
+ */
+function favoritesClickHandler(e) {
     let clickedItem = e.target;
-  
+
     if (clickedItem.classList.contains('selected')) {
+        // Unfavoritize anime
         let favoriteItemsString = localStorage.getItem('favoriteItems');
         let anime = animeData[clickedItem.dataset.id];
         if (favoriteItemsString !== null) {
@@ -51,6 +59,7 @@ function favoritesOpenClickHandler(e) {
             clickedItem.classList.remove('selected');
         }
     } else {
+        // Favoritize anime
         let anime = animeData[clickedItem.dataset.id];
     
         favoriteItems.push(anime);
@@ -60,7 +69,12 @@ function favoritesOpenClickHandler(e) {
     }
 }
 
-function detailsCloseClickHandler(e) {
+/**
+ * Handler for when the details close button is clicked
+ * 
+ * @param e 
+ */
+ function detailsCloseClickHandler(e) {
     let clickedItem = e.target;
   
     if (clickedItem.nodeName !== "BUTTON") {
@@ -73,7 +87,12 @@ function detailsCloseClickHandler(e) {
     details.removeEventListener('click', detailsCloseClickHandler);
 }
 
-function detailsOpenClickHandler(e) {
+/**
+ * Handler for when the details button is clicked
+ * 
+ * @param e 
+ */
+ function detailsClickHandler(e) {
     let clickedItem = e.target;
   
     let anime = animeData[clickedItem.dataset.id];
@@ -84,17 +103,17 @@ function detailsOpenClickHandler(e) {
         // Dataset for the details-content
         detailsContent.dataset.name = anime.name;
 
-        //Element for the image of the anime
+        // Element for the image of the anime
         let image = document.createElement('img');
         image.src = anime.imgUrl;
         detailsContent.appendChild(image);
 
-        //Element for the title of the anime
+        // Element for the title of the anime
         let title = document.createElement('h2');
         title.innerHTML = `${anime.name}`;
         detailsContent.appendChild(title);
 
-        //Element for the description of the anime
+        // Element for the description of the anime
         let desc = document.createElement('p');
         desc.innerHTML = `${anime.description}`;
         detailsContent.appendChild(desc);
@@ -108,7 +127,12 @@ function detailsOpenClickHandler(e) {
     details.addEventListener('click', detailsCloseClickHandler);
 }
 
-function animeClickHandler(e) {
+/**
+ * Handler for when a button is clicked
+ * 
+ * @param e 
+ */
+ function animeClickHandler(e) {
     let clickedItem = e.target;
 
     if (clickedItem.nodeName !== "BUTTON") {
@@ -116,9 +140,9 @@ function animeClickHandler(e) {
     }
 
     if (clickedItem.id == "details") {
-        detailsOpenClickHandler(e);
+        detailsClickHandler(e);
     } else if (clickedItem.id == "favorites") {
-        favoritesOpenClickHandler(e);
+        favoritesClickHandler(e);
     } else {
         return;
     }
@@ -130,14 +154,15 @@ function animeClickHandler(e) {
 function getAnimeData()
 {
     fetch(fetchUrl)
-    .then((response) => {
-    if (!response.ok) {
-        throw new Error(response.statusText);
-    }
-    return response.json();
-    })
-    .then(createAnimeCards)
-    .catch(ajaxErrorHandler);
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(response.statusText);
+            }
+            
+            return response.json();
+        })
+        .then(createAnimeCards)
+        .catch(ajaxErrorHandler);
 }
 
 /**
@@ -147,18 +172,18 @@ function getAnimeData()
  */
 function createAnimeCards(data)
 {
-    //Loop through the list of anime
+    // Loop through the list of anime
     for (let anime of data) {
-        //Wrapper element for every anime card. We need the wrapper now, because adding it later
-        //will result in anime being ordered based on the load times of the API instead of chronically
+        // Wrapper element for every anime card. We need the wrapper now, because adding it later
+        // will result in anime being ordered based on the load times of the API instead of chronically
         let animeCard = document.createElement('div');
         animeCard.classList.add('anime-card');
         animeCard.dataset.name = anime.name;
 
-        //Append anime card to the actual HTML
+        // Append anime card to the actual HTML
         magazine.appendChild(animeCard);
 
-        //Retrieve the detail information from the API
+        // Retrieve the detail information from the API
         fetch((fetchUrl + '?id=' + anime.id))
         .then((response) => {
             if (!response.ok) {
@@ -178,10 +203,10 @@ function createAnimeCards(data)
  */
 function fillAnimeCard(anime)
 {
-    //Wrapper element for every anime card
+    // Wrapper element for every anime card
     let animeCard = document.querySelector(`.anime-card[data-name='${anime.name}']`);
 
-    //Element for the image of the anime
+    // Element for the image of the anime
     let image = document.createElement('img');
     image.src = anime.imgUrl;
     animeCard.appendChild(image);
@@ -191,14 +216,14 @@ function fillAnimeCard(anime)
     title.innerHTML = `${anime.name}`;
     animeCard.appendChild(title);
 
-    //Element for the image of the anime
+    // Element for the image of the anime
     let detailsButton = document.createElement('button');
     detailsButton.innerHTML = "Details";
     detailsButton.id = "details";
     detailsButton.dataset.id = anime.id;
     animeCard.appendChild(detailsButton);
 
-    //Element for the image of the anime
+    // Element for the image of the anime
     let favButton = document.createElement('button');
     favButton.innerHTML = "Favoritize";
     favButton.id = "favorites";
@@ -208,6 +233,7 @@ function fillAnimeCard(anime)
     favButton.dataset.id = anime.id;
     animeCard.appendChild(favButton);
 
+    // Add anime to animeData
     animeData[anime.id] = anime;
 }
 
