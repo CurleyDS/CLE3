@@ -1,7 +1,8 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
-    padding: 0;
+    background-color: lightgrey;
     margin: 0;
+    padding: 0;
 }
 
 .header {
@@ -17,11 +18,11 @@ body {
 .section {
     display: flex;
     justify-content: center;
-    background-color: lightgrey;
 }
 
 .section.open-details {
     justify-content: space-between;
+    height: 90.5vh;
 }
 
 #anime-magazine {
@@ -36,9 +37,9 @@ body {
 .anime-card {
     background-color: white;
     margin: 5px;
-    border-radius: .25rem;
+    border-radius: .25rem !important;
     width: 180px;
-    max-height: 335px;
+    max-height: 370px;
     text-align: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
@@ -48,14 +49,14 @@ body {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.4);
 }
 
-.anime-card h2 {
-    font-size: 18px;
-    margin-bottom: 0.5rem;
-}
-
 .anime-card img {
     width: 100%;
     max-height: 250px;
+}
+
+.anime-card h2 {
+    font-size: 18px;
+    margin-bottom: 1rem;
 }
 
 .anime-card button {
@@ -63,8 +64,16 @@ body {
     cursor: pointer;
     border: 0;
     padding: 0.5rem;
-    margin-top: 0.5rem;
     font-weight: bold;
+}
+
+.anime-card button:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#favorites.selected {
+    background-color: blue;
+    color: white;
 }
 
 .error {
@@ -81,26 +90,15 @@ body {
     justify-content: center;
     align-items: flex-start;
     background-color: darkgrey;
-    padding: 0 1rem;
+    padding: 1rem;
+    overflow-y: auto;
     width: 25%;
-    height: 100%;
-}
-
-.details-close {
-    background: none;
-    border: 0;
-    padding: 0;
-    font-weight: bold;
-    font-size: 22px;
-    color: black;
-    cursor: pointer;
 }
 
 .details-content img {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
-    padding: auto 1em;
+    margin: 5px auto;
+    border-radius: .25rem;
     width: 250px;
     height: auto;
 }
@@ -113,4 +111,17 @@ body {
 .details-content p {
     margin: 0;
     padding: 0 1em;
+}
+
+.details-close {
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: .25rem;
+    margin: 5px;
+    padding: .25em .5em;
+    font-weight: bold;
+    font-size: 22px;
+    color: black;
+    cursor: pointer;
 }

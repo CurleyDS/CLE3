@@ -3,6 +3,7 @@ window.addEventListener('load', init);
 let fetchUrl = 'http://localhost/CLE3/webservice/index.php';
 let magazine;
 let animeData = {};
+let favoriteItems = [];
 
 function init()
 {
@@ -17,6 +18,46 @@ function init()
 
     //Start the application with loading the API data
     getAnimeData();
+    
+    let favoriteItemsString = localStorage.getItem('favoriteItems');
+    if (favoriteItemsString !== null) {
+        favoriteItems = JSON.parse(favoriteItemsString);
+        console.log(favoriteItems);
+    }
+}
+
+function addToFavorites(anime) {
+    let animeCard = document.querySelector(`.anime-card[data-name='${anime.name}']`);
+    
+    console.log(animeCard);
+}
+
+function favoritesOpenClickHandler(e) {
+    let clickedItem = e.target;
+  
+    if (clickedItem.classList.contains('selected')) {
+        let favoriteItemsString = localStorage.getItem('favoriteItems');
+        let anime = animeData[clickedItem.dataset.id];
+        if (favoriteItemsString !== null) {
+            favoriteItems = JSON.parse(favoriteItemsString);
+            newItems = [];
+            for (let x = 0; x < favoriteItems.length; x++) {
+                if (favoriteItems[x].name != anime.name) {
+                    newItems.push(favoriteItems[x]);
+                }
+            }
+            favoriteItems = newItems;
+            localStorage.setItem('favoriteItems', JSON.stringify(newItems));
+            clickedItem.classList.remove('selected');
+        }
+    } else {
+        let anime = animeData[clickedItem.dataset.id];
+    
+        favoriteItems.push(anime);
+        localStorage.setItem('favoriteItems', JSON.stringify(favoriteItems));
+        
+        clickedItem.classList.add('selected');
+    }
 }
 
 function detailsCloseClickHandler(e) {
@@ -32,13 +73,9 @@ function detailsCloseClickHandler(e) {
     details.removeEventListener('click', detailsCloseClickHandler);
 }
 
-function animeClickHandler(e) {
+function detailsOpenClickHandler(e) {
     let clickedItem = e.target;
-
-    if (clickedItem.nodeName !== "BUTTON") {
-        return;
-    }
-
+  
     let anime = animeData[clickedItem.dataset.id];
     
     detailsContent.innerHTML = "";
@@ -69,6 +106,22 @@ function animeClickHandler(e) {
     }
 
     details.addEventListener('click', detailsCloseClickHandler);
+}
+
+function animeClickHandler(e) {
+    let clickedItem = e.target;
+
+    if (clickedItem.nodeName !== "BUTTON") {
+        return;
+    }
+
+    if (clickedItem.id == "details") {
+        detailsOpenClickHandler(e);
+    } else if (clickedItem.id == "favorites") {
+        favoritesOpenClickHandler(e);
+    } else {
+        return;
+    }
 }
 
 /**
@@ -128,21 +181,32 @@ function fillAnimeCard(anime)
     //Wrapper element for every anime card
     let animeCard = document.querySelector(`.anime-card[data-name='${anime.name}']`);
 
+    //Element for the image of the anime
+    let image = document.createElement('img');
+    image.src = anime.imgUrl;
+    animeCard.appendChild(image);
+
     // Element for the anime
     let title = document.createElement('h2');
     title.innerHTML = `${anime.name}`;
     animeCard.appendChild(title);
 
     //Element for the image of the anime
-    let image = document.createElement('img');
-    image.src = anime.imgUrl;
-    animeCard.appendChild(image);
+    let detailsButton = document.createElement('button');
+    detailsButton.innerHTML = "Details";
+    detailsButton.id = "details";
+    detailsButton.dataset.id = anime.id;
+    animeCard.appendChild(detailsButton);
 
     //Element for the image of the anime
-    let button = document.createElement('button');
-    button.innerHTML = "Details";
-    button.dataset.id = anime.id;
-    animeCard.appendChild(button);
+    let favButton = document.createElement('button');
+    favButton.innerHTML = "Favoritize";
+    favButton.id = "favorites";
+    if (favoriteItems.some(favoriteItem => favoriteItem.name == anime.name)) {
+        favButton.classList.add('selected');
+    }
+    favButton.dataset.id = anime.id;
+    animeCard.appendChild(favButton);
 
     animeData[anime.id] = anime;
 }
