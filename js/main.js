@@ -22,7 +22,7 @@ function init()
     // Get divs en button elements for details
     details = document.getElementById('anime-detail');
     detailsContent = document.querySelector('.details-content');
-    detailsCloseButton = document.getElementById('details-content');
+    detailsCloseButton = document.getElementById('details-close');
 
     // Start the application with loading the API data
     getAnimeData();
@@ -117,6 +117,15 @@ function favoritesClickHandler(e) {
         let desc = document.createElement('p');
         desc.innerHTML = `${anime.description}`;
         detailsContent.appendChild(desc);
+
+        // Elements for the genres of the anime
+        let div = document.createElement('div');
+        for (genre of anime.genres) {
+            let tag = document.createElement('h6');
+            tag.innerHTML = `${genre}`;
+            div.appendChild(tag);
+        }
+        detailsContent.appendChild(div);
         
         section.classList.add('open-details');
         details.classList.add('open');

@@ -113,6 +113,19 @@ body {
     padding: 0 1em;
 }
 
+.details-content div {
+    padding: 1em;
+}
+
+.details-content div h6 {
+    display: inline;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 5px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: .25rem;
+    padding: 5px 7.5px;
+}
+
 .details-close {
     display: flex;
     align-items: center;
