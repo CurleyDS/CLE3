@@ -7,6 +7,7 @@ body {
 
 .header {
     background-color: blue;
+    margin: 0 0 1rem 0;
 }
 
 .header h1 {
@@ -39,7 +40,6 @@ body {
     margin: 5px;
     border-radius: .25rem !important;
     width: 180px;
-    max-height: 370px;
     text-align: center;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
@@ -56,7 +56,7 @@ body {
 
 .anime-card h2 {
     font-size: 18px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .anime-card button {
@@ -64,16 +64,8 @@ body {
     cursor: pointer;
     border: 0;
     padding: 0.5rem;
+    margin-top: 0.5rem;
     font-weight: bold;
-}
-
-.anime-card button:hover {
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
-#favorites.selected {
-    background-color: blue;
-    color: white;
 }
 
 .error {
@@ -81,60 +73,58 @@ body {
     color: red;
 }
 
-.details {
-    display: none;
-}
-
-.details.open {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    background-color: darkgrey;
-    padding: 1rem;
-    overflow-y: auto;
-    width: 25%;
-}
-
-.details-content img {
-    display: block;
-    margin: 5px auto;
-    border-radius: .25rem;
-    width: 250px;
-    height: auto;
-}
-
-.details-content h2 {
-    margin: 0;
-    padding: 1em;
-}
-
-.details-content p {
-    margin: 0;
-    padding: 0 1em;
-}
-
-.details-content div {
-    padding: 1em;
-}
-
-.details-content div h6 {
-    display: inline;
-    background-color: rgba(0, 0, 0, 0.5);
-    margin: 5px;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: .25rem;
-    padding: 5px 7.5px;
-}
-
-.details-close {
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
-    background-color: rgba(0, 0, 0, 0.5);
-    border-radius: .25rem;
-    margin: 5px;
-    padding: .25em .5em;
+    justify-content: center;
+}
+
+.modal.open {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+.modal-bg {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    height: 100%;
+}
+
+.modal-container {
+    border-radius: 10px;
+    background: #fff;
+    position: relative;
+    padding: 30px;
+}
+
+.modal-close {
+    position: absolute;
+    right: 20px;
+    top: 30px;
+    outline: none;
+    appearance: none;
+    color: darkred;
+    background: none;
+    border: 0;
     font-weight: bold;
     font-size: 22px;
-    color: black;
     cursor: pointer;
+}
+
+.modal-content h1 {
+    margin: 0;
+}
+
+.modal-content img {
+    width: 250px;
 }
